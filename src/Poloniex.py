@@ -61,7 +61,7 @@ class API:
     def subscribe(self, topic: str, callback: callable):
         self.callback = callback
         self.topic = topic
-        self.runner.run(SteamingAPI.RunningAPI())
+        self.runner.run(API.RunningAPI())
 
     # Public HTTP API, no credentials needed.
 
