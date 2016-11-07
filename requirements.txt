@@ -1,0 +1,4 @@
+autobahn>=0.16.0
+configObj>=5.0.6
+requests>=2.11.1
+ratelimiter>=1.0.2.post0
