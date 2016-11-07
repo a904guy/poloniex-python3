@@ -56,10 +56,14 @@ class API:
         self.limiter = RateLimiter(max_calls=self.max_calls, period=self.max_period)
         self.runner = ApplicationRunner(self.ws_uri, self.ws_realm)
 
+    # WAMP Streaming API
+
     def subscribe(self, topic: str, callback: callable):
         self.callback = callback
         self.topic = topic
         self.runner.run(SteamingAPI.RunningAPI())
+
+    # Public HTTP API, no credentials needed.
 
     def returnTicker(self):
         return self.call(sys._getframe().f_code.co_name, {})
@@ -80,9 +84,92 @@ class API:
         return self.call(sys._getframe().f_code.co_name, {})
 
     def returnLoanOrders(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, **kwargs)
+        return self.call(sys._getframe().f_code.co_name, kwargs)
 
-    def call(self, topic: str, args: dict() = {}):
+    # Private HTTP API Methods, Require API Key, and Secret on INIT
+
+    def returnBalances(self):
+        return self.call(sys._getframe().f_code.co_name, {})
+
+    def returnCompleteBalances(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def returnDepositAddresses(self):
+        return self.call(sys._getframe().f_code.co_name, {})
+
+    def generateNewAddress(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def returnDepositsWithdrawals(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def returnOpenOrders(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def returnOrderTrades(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def buy(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def sell(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def cancelOrder(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def moveOrder(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def withdraw(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def returnFeeInfo(self):
+        return self.call(sys._getframe().f_code.co_name, {})
+
+    def returnAvailableAccountBalances(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def returnTradableBalances(self):
+        return self.call(sys._getframe().f_code.co_name, {})
+
+    def transferBalance(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def returnMarginAccountSummary(self):
+        return self.call(sys._getframe().f_code.co_name, {})
+
+    def marginBuy(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def marginSell(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def getMarginPosition(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def closeMarginPosition(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def createLoanOffer(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def cancelLoanOffer(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def returnOpenLoanOffers(self):
+        return self.call(sys._getframe().f_code.co_name, {})
+
+    def returnActiveLoans(self):
+        return self.call(sys._getframe().f_code.co_name, {})
+
+    def returnLendingHistory(self):
+        return self.call(sys._getframe().f_code.co_name, {})
+
+    def toggleAutoRenew(self, **kwargs):
+        return self.call(sys._getframe().f_code.co_name, kwargs)
+
+    def _call(self, topic: str, args: dict() = {}):
         if topic in ['returnTicker', 'return24Volume', 'returnOrderBook', 'returnTradeHistory', 'returnChartData', 'returnCurrencies', 'returnLoanOrders']:
             api = [self.public_url, 'get', topic]
         else:
