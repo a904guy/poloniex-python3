@@ -18,6 +18,7 @@
 
 import hashlib
 import hmac
+import json
 import time
 import sys
 
@@ -25,6 +26,7 @@ import requests
 from configobj import ConfigObj
 from autobahn.asyncio.wamp import ApplicationSession, ApplicationRunner
 from ratelimiter import RateLimiter
+
 
 # from pprint import pprint as pp
 
@@ -49,7 +51,7 @@ class API:
         async def onJoin(self, details):
             await self.subscribe(self.callback, self.topic)
 
-    def __init__(self, config: ConfigObj):
+    def __init__(self, config: ConfigObj or dict() = {}):
         self.secrets = config
         self.limiter = RateLimiter(max_calls=self.max_calls, period=self.max_period)
         self.runner = ApplicationRunner(self.ws_uri, self.ws_realm)
@@ -60,10 +62,10 @@ class API:
         self.runner.run(SteamingAPI.RunningAPI())
 
     def returnTicker(self):
-        return self.call(sys._getframe().f_code.co_name, '')
+        return self.call(sys._getframe().f_code.co_name, {})
 
     def return24Volume(self):
-        return self.call(sys._getframe().f_code.co_name, '')
+        return self.call(sys._getframe().f_code.co_name, {})
 
     def returnOrderBook(self, **kwargs):
         return self.call(sys._getframe().f_code.co_name, kwargs)
@@ -75,27 +77,27 @@ class API:
         return self.call(sys._getframe().f_code.co_name, kwargs)
 
     def returnCurrencies(self):
-        return self.call(sys._getframe().f_code.co_name, '')
+        return self.call(sys._getframe().f_code.co_name, {})
 
     def returnLoanOrders(self, **kwargs):
         return self.call(sys._getframe().f_code.co_name, **kwargs)
 
-    def call(self, topic: str, args: dict()):
+    def call(self, topic: str, args: dict() = {}):
         if topic in ['returnTicker', 'return24Volume', 'returnOrderBook', 'returnTradeHistory', 'returnChartData', 'returnCurrencies', 'returnLoanOrders']:
-            api = (self.public_url, 'get', topic)
+            api = [self.public_url, 'get', topic]
         else:
-            api = (self.private_url, 'post', topic, self.secrets)
+            api = [self.private_url, 'post', topic, self.secrets]
 
         def __call(api_details, uri):
             request = getattr(requests, api_details[1])
             headers = {}
             uri['command'] = api_details[2]
-            if uri[2] == 'post':
+            if api_details[2] == 'post':
                 uri['nonce'] = int(time.time() * 1000)
-                sign = hmac.new(self.Secret, uri, hashlib.sha512).hexdigest()
+                sign = hmac.new(api_details[3]['secret'], uri, hashlib.sha512).hexdigest()
                 headers['Sign'] = sign
                 headers['Key'] = api_details[3]['api_key']
-            return request(api_details[0], uri, headers=headers)
+            return json.loads(request(api_details[0], uri, headers=headers).content.decode())
 
         with self.limiter:
             return __call(api, args)
