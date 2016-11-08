@@ -2,6 +2,7 @@
    (Unofficial) Poloniex.com API written in Python 3, supports Streaming, and API calls. (https://github.com/a904guy/poloniex-python3)
    Author: Andy Hawkins
    Website: (http://hawkins.tech)
+
  _   _                _    _           _____         _
 | | | |              | |  (_)         |_   _|       | |
 | |_| | __ ___      _| | ___ _ __  ___  | | ___  ___| |__
@@ -11,9 +12,12 @@
 
    ANDY@HAWKINS.TECH   -  HAWKINS.TECH
    November, 7th 2016
+
    Tested:
    Ubuntu 16.10, Python 3.5.2
    See README.md for instructions
+
+   Documentation: https://poloniex.com/support/api/
 """
 
 import hashlib
@@ -66,108 +70,108 @@ class API:
     # Public HTTP API, no credentials needed.
 
     def returnTicker(self):
-        return self.call(sys._getframe().f_code.co_name, {})
+        return self._call(sys._getframe().f_code.co_name, {})
 
     def return24Volume(self):
-        return self.call(sys._getframe().f_code.co_name, {})
+        return self._call(sys._getframe().f_code.co_name, {})
 
-    def returnOrderBook(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def returnOrderBook(self, currencyPair: str = 'BTC_NXT', depth: int = 10):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def returnTradeHistory(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def returnTradeHistory(self, currencyPair: str = 'BTC_NXT', start: int = 1410158341, end: int = 1410499372):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def returnChartData(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def returnChartData(self, currencyPair: str = 'BTC_NXT', start: int = 1405699200, end: int = 9999999999, period: int = 14400):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
     def returnCurrencies(self):
-        return self.call(sys._getframe().f_code.co_name, {})
+        return self._call(sys._getframe().f_code.co_name, {})
 
-    def returnLoanOrders(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def returnLoanOrders(self, currency: str = 'BTC'):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
     # Private HTTP API Methods, Require API Key, and Secret on INIT
 
     def returnBalances(self):
-        return self.call(sys._getframe().f_code.co_name, {})
+        return self._call(sys._getframe().f_code.co_name, {})
 
-    def returnCompleteBalances(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def returnCompleteBalances(self, account: str = 'all'):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
     def returnDepositAddresses(self):
-        return self.call(sys._getframe().f_code.co_name, {})
+        return self._call(sys._getframe().f_code.co_name, {})
 
-    def generateNewAddress(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def generateNewAddress(self, currency: str = 'BTC'):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def returnDepositsWithdrawals(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def returnDepositsWithdrawals(self, start: int = 1410158341, end: int = 1410499372):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def returnOpenOrders(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def returnOpenOrders(self, currencyPair: str = 'BTC_XCP'):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def returnOrderTrades(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def returnOrderTrades(self, orderNumber: int = None):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def buy(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def buy(self, rate: float, amount: float, currencyPair: str, fillOrKill: int, immediateOrCancel: int, postOnly: int):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def sell(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def sell(self, rate: float, amount: float, currencyPair: str, fillOrKill: int, immediateOrCancel: int, postOnly: int):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def cancelOrder(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def cancelOrder(self, orderNumber: int):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def moveOrder(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def moveOrder(self, orderNumber: int, rate: float, amount: float, immediateOrCancel: int, postOnly: int):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def withdraw(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def withdraw(self, currency: str, amount: float, address: str, paymentId: str):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
     def returnFeeInfo(self):
-        return self.call(sys._getframe().f_code.co_name, {})
+        return self._call(sys._getframe().f_code.co_name, {})
 
-    def returnAvailableAccountBalances(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def returnAvailableAccountBalances(self, account: str = 'all'):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
     def returnTradableBalances(self):
-        return self.call(sys._getframe().f_code.co_name, {})
+        return self._call(sys._getframe().f_code.co_name, {})
 
-    def transferBalance(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def transferBalance(self, currency: str, amount: float, fromAccount: str, toAccount: str):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
     def returnMarginAccountSummary(self):
-        return self.call(sys._getframe().f_code.co_name, {})
+        return self._call(sys._getframe().f_code.co_name, {})
 
-    def marginBuy(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def marginBuy(self, currencyPair: str, rate: float, amount: float):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def marginSell(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def marginSell(self, currencyPair: str, rate: float, amount: float):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def getMarginPosition(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def getMarginPosition(self, currencyPair: str):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def closeMarginPosition(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def closeMarginPosition(self, currencyPair: str):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def createLoanOffer(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def createLoanOffer(self, currency: str, amount: float, duration: int, autoRenew: int, lendingRate: int):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
-    def cancelLoanOffer(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def cancelLoanOffer(self, orderNumber: int):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
     def returnOpenLoanOffers(self):
-        return self.call(sys._getframe().f_code.co_name, {})
+        return self._call(sys._getframe().f_code.co_name, {})
 
     def returnActiveLoans(self):
-        return self.call(sys._getframe().f_code.co_name, {})
+        return self._call(sys._getframe().f_code.co_name, {})
 
     def returnLendingHistory(self):
-        return self.call(sys._getframe().f_code.co_name, {})
+        return self._call(sys._getframe().f_code.co_name, {})
 
-    def toggleAutoRenew(self, **kwargs):
-        return self.call(sys._getframe().f_code.co_name, kwargs)
+    def toggleAutoRenew(self, orderNumber: int):
+        return self._call(sys._getframe().f_code.co_name, locals())
 
     def _call(self, topic: str, args: dict() = {}):
         if topic in ['returnTicker', 'return24Volume', 'returnOrderBook', 'returnTradeHistory', 'returnChartData', 'returnCurrencies', 'returnLoanOrders']:
@@ -178,6 +182,7 @@ class API:
         def __call(api_details, uri):
             request = getattr(requests, api_details[1])
             headers = {}
+            del uri['self']
             uri['command'] = api_details[2]
             if api_details[2] == 'post':
                 uri['nonce'] = int(time.time() * 1000)
